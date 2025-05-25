@@ -21,8 +21,8 @@ pipeline{
         stage("Sonarqube Analysis "){
             steps{
                 withSonarQubeEnv('sonar-server') {
-                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Swiggy \
-                    -Dsonar.projectKey=Swiggy '''
+                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Swiggy1 \
+                    -Dsonar.projectKey=Swiggy1 '''
                 }
             }
         }
@@ -53,21 +53,21 @@ pipeline{
             steps{
                 script{
                    withDockerRegistry(credentialsId: 'docker-creds', toolName: 'docker'){   
-                       sh "docker build -t swiggy ."
-                       sh "docker tag swiggy kastrov/swiggy:latest "
-                       sh "docker push kastrov/swiggy:latest "
+                       sh "docker build -t swiggy1 ."
+                       sh "docker tag swiggy1 kastrov/swiggy1:latest "
+                       sh "docker push kastrov/swiggy1:latest "
                     }
                 }
             }
         }
         stage("TRIVY"){
             steps{
-                sh "trivy image kastrov/swiggy:latest > trivy.txt" 
+                sh "trivy image kastrov/swiggy1:latest > trivy.txt" 
             }
         }
         stage('Deploy to container'){
             steps{
-                sh 'docker run -d --name swiggy -p 3000:3000 kastrov/swiggy:latest'
+                sh 'docker run -d --name swiggy1 -p 3002:3002 kastrov/swiggy1:latest'
             }
         }
     }
